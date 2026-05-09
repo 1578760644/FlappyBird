@@ -1,4 +1,5 @@
 import { _decorator, Component, instantiate, math, Node, Prefab } from 'cc';
+import { Pipe } from './Pipe';
 const { ccclass, property } = _decorator;
 
 @ccclass('PipeSpawner')
@@ -77,8 +78,13 @@ export class PipeSpawner extends Component {
     //控制管道是否开始生成
     public gamePause() {
         this._isSpawing = false;
-        //禁用已经生成的管道
-
+        //通过遍历数组禁用已经生成的管道
+        for (let i = 0; i < this.pipes.length; i++) {
+            const pipe = this.pipes[i].getComponent(Pipe);
+            if (pipe) {
+                pipe.enabled = false; //禁用节点用active，禁用组件用enabled
+            }
+        }
     }
     public gameStart() {
         this._isSpawing = true;
