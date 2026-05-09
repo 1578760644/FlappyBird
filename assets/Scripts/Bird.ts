@@ -1,5 +1,13 @@
-import { _decorator, Component, Input, input, Node, RigidBody, RigidBody2D, Vec2 } from 'cc';
+import { _decorator, Collider2D, Component, Contact2DType, Input, input, IPhysics2DContact, Node, RigidBody, RigidBody2D, Vec2 } from 'cc';
 const { ccclass, property } = _decorator;
+
+enum ColliderType {
+    LAND,
+    PIPE,
+    PIPE_MID
+    
+}
+
 
 @ccclass('Bird')
 export class Bird extends Component {
@@ -18,6 +26,13 @@ export class Bird extends Component {
 
     protected onLoad(): void {
         input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
+
+        //注册单个碰撞体的回调函数
+        let collider = this.getComponent(Collider2D)
+        if (collider) {
+            collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
+            collider.on(Contact2DType.END_CONTACT, this.onEndContact, this)
+        }
     }
 
     start() {
@@ -35,15 +50,25 @@ export class Bird extends Component {
     update(deltaTime: number) {
         //无论是向上还是向下，本质上还是旋转
         this.node.angle -= this.DownAngle * deltaTime;
+        //#region
         // //保证下落角度不超过-60度，实际经过测试基本上都到不了-50度，所以可以不写
         // if (this.node.angle < -60) {
         //     this.node.angle = -60;
         // }
+        //#endregion
 
     }
 
     protected onDestroy(): void {
         input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
+    }
+
+    onBeginContact(selfConllider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+        
+        console.log(otherCollider.tag) //用于检测是否发生碰撞
+    }
+    onEndContact(selfConllider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+
     }
 }
 

@@ -60,10 +60,10 @@ export class PipeSpawner extends Component {
         for (let i = this.pipes.length - 1; i >= 0; i--) {
             const pipe = this.pipes[i]
             //获取世界坐标
-            const worldPos = pipe.getWorldPosition();
+            const pipeWorldPos = pipe.getWorldPosition();
 
             // 坐标在管道的中心，所以还需要额外给一点距离让管道消除
-            if (worldPos.x < -100) {
+            if (pipeWorldPos.x < -100) {
                 pipe.destroy();           // 销毁节点
                 this.pipes.splice(i, 1); // 从数组中移除
             }
