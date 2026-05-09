@@ -1,6 +1,7 @@
 import { _decorator, Component, Node } from 'cc';
 import { Bird } from './Bird';
 import { MoveBg } from './MoveBg';
+import { PipeSpawner } from './PipeSpawner';
 const { ccclass, property } = _decorator;
 
 //通过枚举来控制游戏状态
@@ -30,6 +31,8 @@ export class GameManager extends Component {
     public bgScroll: MoveBg = null;
     @property(MoveBg)
     public landScroll: MoveBg = null;
+    @property(PipeSpawner)
+    public pipespawn: PipeSpawner = null;
 
     curGS: GameState;
 
@@ -47,6 +50,7 @@ export class GameManager extends Component {
         this.bird.disableControl();
         this.bgScroll.disableScroll();
         this.landScroll.disableScroll();
+        this.pipespawn.pause();
     }
     transitionToGamingState() {
         this.curGS = GameState.GAMING

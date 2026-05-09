@@ -700,7 +700,7 @@
     ],
     "value": {
       "__type__": "cc.Vec3",
-      "x": 0,
+      "x": 237.001,
       "y": 0,
       "z": 0
     }
@@ -1558,6 +1558,9 @@
     },
     "landScroll": {
       "__id__": 42
+    },
+    "pipespawn": {
+      "__id__": 16
     },
     "_id": "f97uVB0ZRHOIIDSqeFSCX5"
   },

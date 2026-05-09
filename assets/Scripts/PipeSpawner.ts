@@ -17,6 +17,8 @@ export class PipeSpawner extends Component {
     //用来储存已经生成的管道，销毁要使用到
     private pipes: Node[] = [];
 
+    private _isSpawing: boolean = false;
+
     start() {
 
     }
@@ -49,6 +51,8 @@ export class PipeSpawner extends Component {
     }
 
     update(deltaTime: number) {
+        //检查控制
+        if (this._isSpawing == false) return
         //随机生成管道
         this.pipeRandomSpawn(deltaTime)
         this.checkPipesOutOfScreen();
@@ -68,6 +72,16 @@ export class PipeSpawner extends Component {
                 this.pipes.splice(i, 1); // 从数组中移除
             }
         }
+    }
+
+    //控制管道是否开始生成
+    public pause() {
+        this._isSpawing = false;
+        //禁用已经生成的管道
+
+    }
+    public play() {
+        this._isSpawing = true;
     }
 
 }
