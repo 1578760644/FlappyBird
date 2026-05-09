@@ -1,4 +1,5 @@
 import { _decorator, Component, Node } from 'cc';
+import { GameManager } from './GameManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('MoveBg')
@@ -9,15 +10,16 @@ export class MoveBg extends Component {
     @property(Node)
     public Bg02ToMove: Node | null = null;
 
-    //背景滚动速度默认值
-    @property
-    public BgMoveSpeed: number = 100;
+    //背景滚动速度
+    private BgMoveSpeed: number;
 
     start() {
+        //通过单例模式获取速度
+        this.BgMoveSpeed = GameManager.inst().moveSpeed;
 
     }
 
-    //通过背景向左移动循环来实现背景滚动的效果
+    //通过背景向左移动循环来实现背景滚动的效果，所有需要循环移动的素材都可以用此方法
     private backGroundScroll(deltaTime: number) {
         const moveDistance = this.BgMoveSpeed * deltaTime;
         let b1 = this.Bg01ToMove.getPosition();
