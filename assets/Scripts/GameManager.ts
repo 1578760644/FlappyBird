@@ -2,6 +2,7 @@ import { _decorator, Component, Node } from 'cc';
 import { Bird } from './Bird';
 import { MoveBg } from './MoveBg';
 import { PipeSpawner } from './PipeSpawner';
+import { GameReadyUI } from './UI/GameReadyUI';
 const { ccclass, property } = _decorator;
 
 //通过枚举来控制游戏状态
@@ -33,6 +34,8 @@ export class GameManager extends Component {
     public landScroll: MoveBg = null;
     @property(PipeSpawner)
     public pipespawn: PipeSpawner = null;
+    @property(GameReadyUI)
+    public gameReadyUI: GameReadyUI = null;
 
     curGS: GameState;
 
@@ -50,10 +53,15 @@ export class GameManager extends Component {
         this.bird.disableControl();
         this.bgScroll.disableScroll();
         this.landScroll.disableScroll();
-        this.pipespawn.pause();
+        this.pipespawn.gamePause();
     }
     transitionToGamingState() {
         this.curGS = GameState.GAMING
+        this.bird.enableControl();
+        this.bgScroll.enableScroll();
+        this.landScroll.enableScroll();
+        this.pipespawn.gameStart();
+        this.gameReadyUI.node.active = false; //通过禁用节点来让UI消失
     }
     transitionToGameOverState() {
         this.curGS = GameState.GAMEOVER

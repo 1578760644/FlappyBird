@@ -67,6 +67,12 @@ export class Bird extends Component {
 
     protected onDestroy(): void {
         input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
+
+        let collider = this.getComponent(Collider2D)
+        if (collider) {
+            collider.off(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
+            collider.off(Contact2DType.END_CONTACT, this.onEndContact, this)
+        }
     }
 
     //对外界提供2个方法来启用控制和禁用控制

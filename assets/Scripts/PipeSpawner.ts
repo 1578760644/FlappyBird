@@ -75,12 +75,12 @@ export class PipeSpawner extends Component {
     }
 
     //控制管道是否开始生成
-    public pause() {
+    public gamePause() {
         this._isSpawing = false;
         //禁用已经生成的管道
 
     }
-    public play() {
+    public gameStart() {
         this._isSpawing = true;
     }
 
