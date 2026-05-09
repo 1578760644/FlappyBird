@@ -3,12 +3,43 @@ const { ccclass, property } = _decorator;
 
 @ccclass('MoveBg')
 export class MoveBg extends Component {
+    @property(Node)
+    public Bg01ToMove: Node | null = null;
+
+    @property(Node)
+    public Bg02ToMove: Node | null = null;
+
+    //背景滚动速度默认值
+    @property
+    public BgMoveSpeed: number = 100;
+
     start() {
 
     }
 
+    //通过背景向左移动循环来实现背景滚动的效果
+    private backGroundScroll(deltaTime: number) {
+        const moveDistance = this.BgMoveSpeed * deltaTime;
+        let b1 = this.Bg01ToMove.getPosition();
+        this.Bg01ToMove.setPosition(b1.x - moveDistance, b1.y);
+        let b2 = this.Bg02ToMove.getPosition();
+        this.Bg02ToMove.setPosition(b2.x - moveDistance, b2.y);
+
+        //因为b1与b2是以715px循环的,把b1衔接在b2后面
+        if (b1.x < -715) {
+            b2 = this.Bg02ToMove.getPosition();
+            this.Bg01ToMove.setPosition(b2.x + 715, b2.y);
+        }
+        if (b2.x < -715) {
+            b1 = this.Bg01ToMove.getPosition();
+            this.Bg02ToMove.setPosition(b1.x + 715, b1.y);
+        }
+    }
+
     update(deltaTime: number) {
-        
+        //背景滚动
+        this.backGroundScroll(deltaTime);
     }
 }
-
+
+
