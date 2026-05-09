@@ -1550,6 +1550,15 @@
     "_enabled": true,
     "__prefab": null,
     "moveSpeed": 200,
+    "bird": {
+      "__id__": 48
+    },
+    "bgScroll": {
+      "__id__": 13
+    },
+    "landScroll": {
+      "__id__": 42
+    },
     "_id": "f97uVB0ZRHOIIDSqeFSCX5"
   },
   {

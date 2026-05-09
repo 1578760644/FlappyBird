@@ -13,6 +13,9 @@ export class MoveBg extends Component {
     //背景滚动速度
     private BgMoveSpeed: number;
 
+    //判断背景是否可以滚动
+    private _canScroll: boolean = false;
+
     start() {
         //通过单例模式获取速度
         this.BgMoveSpeed = GameManager.inst().moveSpeed;
@@ -39,8 +42,17 @@ export class MoveBg extends Component {
     }
 
     update(deltaTime: number) {
+        if (this._canScroll == false) return;
         //背景滚动
         this.backGroundScroll(deltaTime);
+    }
+
+    //控制是否可以滚动背景
+    public enableScroll(){
+        this._canScroll = true;
+    }
+    public disableScroll(){
+         this._canScroll = false;
     }
 }
 

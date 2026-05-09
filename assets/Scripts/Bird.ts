@@ -1,11 +1,12 @@
 import { _decorator, Collider2D, Component, Contact2DType, Input, input, IPhysics2DContact, Node, RigidBody, RigidBody2D, Vec2 } from 'cc';
 const { ccclass, property } = _decorator;
 
+//通过枚举来控制小鸟得分
 enum ColliderType {
     LAND,
     PIPE,
     PIPE_MID
-    
+
 }
 
 
@@ -24,6 +25,9 @@ export class Bird extends Component {
     //获取刚体组件，然后通过给刚体组件施加向上的线性速度来实现小鸟向上飞行的操作
     private rgd2D: RigidBody2D = null;
 
+    //判断小鸟是否可以被控制
+    private _canControl: boolean = false;
+
     protected onLoad(): void {
         input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
 
@@ -33,14 +37,15 @@ export class Bird extends Component {
             collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
             collider.on(Contact2DType.END_CONTACT, this.onEndContact, this)
         }
-    }
-
-    start() {
         //获取到当前的刚体组件
         this.rgd2D = this.getComponent(RigidBody2D);
     }
 
+    start() {
+    }
+
     onTouchStart() {
+        if (this._canControl == false) return;
         //控制小鸟上下
         this.rgd2D.linearVelocity = new Vec2(0, this.upDistance)
         //让小鸟抬头 angle本地坐标系下的旋转，用欧拉角表示，但是限定在 z 轴上。
@@ -48,6 +53,7 @@ export class Bird extends Component {
     }
 
     update(deltaTime: number) {
+        if (this._canControl == false) return;
         //无论是向上还是向下，本质上还是旋转
         this.node.angle -= this.DownAngle * deltaTime;
         //#region
@@ -63,8 +69,18 @@ export class Bird extends Component {
         input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
     }
 
+    //对外界提供2个方法来启用控制和禁用控制
+    public enableControl() {
+        this._canControl = true;
+        this.rgd2D.enabled = true; 
+    }
+    public disableControl() {
+        this._canControl = false;
+        this.rgd2D.enabled = false; //禁用刚体组件
+    }
+
     onBeginContact(selfConllider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        
+
         console.log(otherCollider.tag) //用于检测是否发生碰撞
     }
     onEndContact(selfConllider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
