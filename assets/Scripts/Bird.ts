@@ -1,4 +1,5 @@
 import { _decorator, Animation, Collider2D, Component, Contact2DType, Input, input, IPhysics2DContact, Node, RigidBody, RigidBody2D, Vec2 } from 'cc';
+import { GameManager } from './GameManager';
 const { ccclass, property } = _decorator;
 
 //通过枚举来控制小鸟得分
@@ -92,7 +93,10 @@ export class Bird extends Component {
         console.log(otherCollider.tag) //用于检测是否发生碰撞
     }
     onEndContact(selfConllider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-
+        //当小鸟离开管道的时候触发得分
+        if (otherCollider.tag == ColliderType.PIPE_MID) {
+            GameManager.inst().addScore();
+        }
     }
 }
 

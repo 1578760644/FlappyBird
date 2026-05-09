@@ -1,8 +1,9 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Label, Node } from 'cc';
 import { Bird } from './Bird';
 import { MoveBg } from './MoveBg';
 import { PipeSpawner } from './PipeSpawner';
 import { GameReadyUI } from './UI/GameReadyUI';
+import { GameData } from './GameData';
 const { ccclass, property } = _decorator;
 
 //通过枚举来控制游戏状态
@@ -36,6 +37,10 @@ export class GameManager extends Component {
     public pipespawn: PipeSpawner = null;
     @property(GameReadyUI)
     public gameReadyUI: GameReadyUI = null;
+    @property(Node)
+    public gamingUI: Node = null;
+    @property(Label)
+    public scoreLabel: Label = null;
 
     curGS: GameState;
 
@@ -54,6 +59,7 @@ export class GameManager extends Component {
         this.bgScroll.disableScroll();
         this.landScroll.disableScroll();
         this.pipespawn.gamePause();
+        this.gamingUI.active = false;
     }
     transitionToGamingState() {
         this.curGS = GameState.GAMING
@@ -62,9 +68,18 @@ export class GameManager extends Component {
         this.landScroll.enableScroll();
         this.pipespawn.gameStart();
         this.gameReadyUI.node.active = false; //通过禁用节点来让UI消失
+        this.gamingUI.active = true;
     }
     transitionToGameOverState() {
         this.curGS = GameState.GAMEOVER
+    }
+
+    //得分了就调用此方法
+    addScore(count: number = 1) {
+        //在GameManager里面调用GameData里增加分数的方法
+        GameData.addScore();
+        //调用方法获得得分给label组件
+        this.scoreLabel.string = GameData.getScore.toString();
     }
 }
 
