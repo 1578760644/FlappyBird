@@ -33,7 +33,7 @@ export class PipeSpawner extends Component {
             pipeInst.setWorldPosition(p);
 
             //通过随机整数来修改y轴生成的高度，实现控制管道的上下
-            const y = math.randomRangeInt(-300, 350);
+            const y = math.randomRangeInt(-250, 300);
 
             //本地高度通过修改本地坐标y实现
             const pLoca = pipeInst.getPosition();
