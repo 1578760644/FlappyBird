@@ -94,7 +94,7 @@ export class Bird extends Component {
     }
     onEndContact(selfConllider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
         //当小鸟离开管道的时候触发得分
-        if (otherCollider.tag == ColliderType.PIPE_MID) {
+        if (otherCollider.tag === ColliderType.PIPE_MID) {
             GameManager.inst().addScore();
         }
     }

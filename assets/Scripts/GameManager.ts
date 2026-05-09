@@ -11,11 +11,11 @@ enum GameState {
     READY,
     GAMING,
     GAMEOVER
-}
+} //目前还没有用到
 
 @ccclass('GameManager')
 export class GameManager extends Component {
-    //通过单例模式来管理速度
+    //通过单例模式来管理项目
     private static _inst: GameManager = null;
     //相当于是get方法
     public static inst() {
@@ -79,7 +79,7 @@ export class GameManager extends Component {
         //在GameManager里面调用GameData里增加分数的方法
         GameData.addScore();
         //调用方法获得得分给label组件
-        this.scoreLabel.string = GameData.getScore.toString();
+        this.scoreLabel.string = GameData.getScore().toString();
     }
 }
 
