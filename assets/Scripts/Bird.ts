@@ -84,7 +84,6 @@ export class Bird extends Component {
     }
     public disableControl() {
         this._canControl = false;
-
         // this.rgd2D.enabled = false; //禁用刚体组件
 
         //#region
