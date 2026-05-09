@@ -18,8 +18,7 @@ export class PipeSpawner extends Component {
 
     }
 
-    update(deltaTime: number) {
-
+    pipeRandomSpawn(deltaTime: number) {
         this.timer += deltaTime;
         if (this.timer > this.spawnRate) {
             //计时归零，重新计算
@@ -42,6 +41,10 @@ export class PipeSpawner extends Component {
 
         }
     }
+
+    update(deltaTime: number) {
+        //随机生成管道
+        this.pipeRandomSpawn(deltaTime)
+    }
+
 }
-
-
