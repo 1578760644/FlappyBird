@@ -4,6 +4,7 @@ import { MoveBg } from './MoveBg';
 import { PipeSpawner } from './PipeSpawner';
 import { GameReadyUI } from './UI/GameReadyUI';
 import { GameData } from './GameData';
+import { GameOverUI } from './UI/GameOverUI';
 const { ccclass, property } = _decorator;
 
 //通过枚举来控制游戏状态
@@ -41,6 +42,8 @@ export class GameManager extends Component {
     public gamingUI: Node = null;
     @property(Label)
     public scoreLabel: Label = null;
+    @property(GameOverUI)
+    public gameOverUI: GameOverUI = null;
 
     curGS: GameState;
 
@@ -59,7 +62,9 @@ export class GameManager extends Component {
         this.bgScroll.disableScroll();
         this.landScroll.disableScroll();
         this.pipespawn.gamePause();
+        this.gameReadyUI.node.active = true;
         this.gamingUI.active = false;
+        this.gameOverUI.node.active = false;
     }
     transitionToGamingState() {
         this.curGS = GameState.GAMING
@@ -69,9 +74,18 @@ export class GameManager extends Component {
         this.pipespawn.gameStart();
         this.gameReadyUI.node.active = false; //通过禁用节点来让UI消失
         this.gamingUI.active = true;
+        this.gameOverUI.node.active = false;
     }
     transitionToGameOverState() {
         this.curGS = GameState.GAMEOVER
+        this.bird.disableControl();
+        this.bgScroll.disableScroll();
+        this.landScroll.disableScroll();
+        this.pipespawn.gamePause();
+        this.gameReadyUI.node.active = false;
+        this.gamingUI.active = false;
+        this.gameOverUI.node.active = true;
+        this.gameOverUI.show(0, 0)
     }
 
     //得分了就调用此方法

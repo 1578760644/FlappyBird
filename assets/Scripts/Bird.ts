@@ -89,8 +89,10 @@ export class Bird extends Component {
     }
 
     onBeginContact(selfConllider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-
-        console.log(otherCollider.tag) //用于检测是否发生碰撞
+        // console.log(otherCollider.tag) //用于检测是否发生碰撞
+        if (otherCollider.tag === ColliderType.LAND || ColliderType.PIPE) {
+            GameManager.inst().transitionToGameOverState();
+        }
     }
     onEndContact(selfConllider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
         //当小鸟离开管道的时候触发得分
