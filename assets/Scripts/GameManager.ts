@@ -56,6 +56,9 @@ export class GameManager extends Component {
     //在onload里面赋值，之后其他的程序是在start里面执行
     onLoad() {
         GameManager._inst = this;
+        // 强制清空所有本地存储
+        // localStorage.clear();
+        // console.log("LocalStorage has been cleared!");
     }
     protected start(): void {
         this.transitionToReadyState();
