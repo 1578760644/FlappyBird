@@ -78,7 +78,7 @@ export class GameManager extends Component {
     }
     transitionToGameOverState() {
         this.curGS = GameState.GAMEOVER
-        this.bird.disableControl();
+        this.bird.disableControlNotRGD();   //通过不禁用刚体组件的方法来避免报错
         this.bgScroll.disableScroll();
         this.landScroll.disableScroll();
         this.pipespawn.gamePause();

@@ -84,25 +84,15 @@ export class Bird extends Component {
     }
     public disableControl() {
         this._canControl = false;
-        // this.rgd2D.enabled = false; //禁用刚体组件
-
-        //#region
-        //直接写这一句不行会报错，AI解读：
-        // 这是 Cocos Creator 3.x 物理引擎的一个经典坑：在 onBeginContact或 onEndContact等物理回调中，不能直接销毁或禁用刚体。
-        // 因为此时物理世界（Box2D）还在“结算”这一帧的碰撞数据，你直接把刚体干掉了，下一行代码引擎再去读它时就炸了。
-        // 必须在 disableControl里禁用刚体，我们就把禁用操作推迟到下一帧执行。这样物理引擎就有足够的时间把手头的事做完，再去睡觉。
-        //#endregion
-        // 使用 scheduleOnce 把禁用操作放到下一帧执行
-        this.scheduleOnce(() => {
-            // 再次检查刚体是否还存在（防止节点已被销毁）
-            if (this.rgd2D && this.rgd2D.isValid) {
-                this.rgd2D.enabled = false; // 现在这一句就安全了！
-            }
-        }, 0); // 0 表示延迟一帧
-
+        this.rgd2D.enabled = false; //禁用刚体组件
+        this.getComponent(Animation).enabled = false; //禁用动画组件
+    }
+    public disableControlNotRGD() {
+        this._canControl = false;
         this.getComponent(Animation).enabled = false; //禁用动画组件
     }
 
+    //这个方法是通过刚体组件发起的，再通过transitionToGameOverState方法把刚体组件禁用会报错。因为游戏结束只是需要解除控制就可以了，不需要再禁用刚体组件。所以游戏结束需要单独调用一个方法，避免禁用刚体组件
     onBeginContact(selfConllider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
         // console.log(otherCollider.tag) //用于检测是否发生碰撞
         if (otherCollider.tag === ColliderType.LAND || otherCollider.tag === ColliderType.PIPE) {
