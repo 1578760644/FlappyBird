@@ -18,6 +18,9 @@ export class GameData {
     public static getScore(): number {
         return this._score;
     }
+    public static setScore(): number {
+        return this._score = 0;
+    }
 
     //存在本地的最高分
     public static getBestScore() {

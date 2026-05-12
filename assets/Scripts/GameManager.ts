@@ -7,12 +7,12 @@ import { GameData } from './GameData';
 import { GameOverUI } from './UI/GameOverUI';
 const { ccclass, property } = _decorator;
 
-//通过枚举来控制游戏状态
-enum GameState {
+//通过export枚举来控制游戏状态
+export const enum GameState {
     READY,
     GAMING,
     GAMEOVER
-} //目前还没有用到
+} //实际上没有起作用，暂时没有通过状态判断来进行其他的操作
 
 @ccclass('GameManager')
 export class GameManager extends Component {
@@ -22,6 +22,7 @@ export class GameManager extends Component {
     public static inst() {
         return this._inst;
     }
+
 
     //背景滚动速度
     @property

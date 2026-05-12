@@ -1,5 +1,6 @@
-import { _decorator, Component, Input, input, Label, Node } from 'cc';
+import { _decorator, Component, director, Input, input, Label, Node } from 'cc';
 import { GameManager } from '../GameManager';
+import { GameData } from '../GameData';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameOverUI')
@@ -50,6 +51,12 @@ export class GameOverUI extends Component {
     }
     onTouchStart() {
         GameManager.inst().transitionToGameOverState();
+    }
+    onPlayButtonClick() {
+        // 通过loadScene重新加载当前场景，用getScene.name获取当当前场景名字
+        director.loadScene(director.getScene().name);
+        //需要把curScore分数清零
+        GameData.setScore();
     }
 }
 
