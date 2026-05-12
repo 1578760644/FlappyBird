@@ -21,7 +21,7 @@ export class Bird extends Component {
     public UpAngle: number = 30;
     //向下掉落角度
     @property
-    public DownAngle: number = 30;
+    public DownAngle: number = 50;
 
     //获取刚体组件，然后通过给刚体组件施加向上的线性速度来实现小鸟向上飞行的操作
     private rgd2D: RigidBody2D = null;

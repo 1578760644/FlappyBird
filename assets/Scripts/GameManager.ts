@@ -77,6 +77,7 @@ export class GameManager extends Component {
         this.gameOverUI.node.active = false;
     }
     transitionToGameOverState() {
+        if (this.curGS == GameState.GAMEOVER) return //发生碰撞之后游戏结束，第二次碰撞就不再会调用了
         this.curGS = GameState.GAMEOVER
         this.bird.disableControlNotRGD();   //通过不禁用刚体组件的方法来避免报错
         this.bgScroll.disableScroll();
@@ -85,7 +86,9 @@ export class GameManager extends Component {
         this.gameReadyUI.node.active = false;
         this.gamingUI.active = false;
         this.gameOverUI.node.active = true;
-        this.gameOverUI.show(0, 0)
+        this.gameOverUI.show(GameData.getScore(), GameData.getBestScore());
+        //游戏结束后要保存数据
+        GameData.saveScore();
     }
 
     //得分了就调用此方法
