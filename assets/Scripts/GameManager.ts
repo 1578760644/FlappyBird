@@ -1,10 +1,11 @@
-import { _decorator, Component, Label, Node } from 'cc';
+import { _decorator, AudioClip, Component, Label, Node } from 'cc';
 import { Bird } from './Bird';
 import { MoveBg } from './MoveBg';
 import { PipeSpawner } from './PipeSpawner';
 import { GameReadyUI } from './UI/GameReadyUI';
 import { GameData } from './GameData';
 import { GameOverUI } from './UI/GameOverUI';
+import { AudioMgr } from './AudioMgr';
 const { ccclass, property } = _decorator;
 
 //通过export枚举来控制游戏状态
@@ -45,6 +46,10 @@ export class GameManager extends Component {
     public scoreLabel: Label = null;
     @property(GameOverUI)
     public gameOverUI: GameOverUI = null;
+    @property(AudioClip)
+    public bgAudio: AudioClip = null;
+    @property(AudioClip)
+    public gameOverAudio: AudioClip = null;
 
     curGS: GameState;
 
@@ -54,6 +59,7 @@ export class GameManager extends Component {
     }
     protected start(): void {
         this.transitionToReadyState();
+        AudioMgr.inst.play(this.bgAudio, 0.5)
     }
 
     //通过三个方法来控制游戏的开始和结束
@@ -91,6 +97,9 @@ export class GameManager extends Component {
         // this.gameOverUI.show(0, 0);
         //游戏结束后要保存数据
         GameData.saveScore();
+        //停止背景音乐并播放游戏失败声音
+        AudioMgr.inst.stop();
+        AudioMgr.inst.playOneShot(this.gameOverAudio, 0.5);
     }
 
     //得分了就调用此方法

@@ -1409,6 +1409,14 @@
     "upDistance": 11,
     "UpAngle": 30,
     "DownAngle": 50,
+    "clickAudio": {
+      "__uuid__": "54772f3f-525e-47de-9378-8999582be5b9",
+      "__expectedType__": "cc.AudioClip"
+    },
+    "scoreAudio": {
+      "__uuid__": "d309f378-7b73-44c3-97c5-abede38d609c",
+      "__expectedType__": "cc.AudioClip"
+    },
     "_id": "b1W6ECEiFP46ioSSxsGj7L"
   },
   {
@@ -1514,6 +1522,14 @@
     },
     "gameOverUI": {
       "__id__": 73
+    },
+    "bgAudio": {
+      "__uuid__": "b23ccec9-85e4-46c1-a290-af009eddebd1",
+      "__expectedType__": "cc.AudioClip"
+    },
+    "gameOverAudio": {
+      "__uuid__": "7f71c803-d674-4c87-88ab-d3cc0fea2398",
+      "__expectedType__": "cc.AudioClip"
     },
     "_id": "f97uVB0ZRHOIIDSqeFSCX5"
   },

@@ -1,5 +1,6 @@
-import { _decorator, Animation, Collider2D, Component, Contact2DType, ERigidBody2DType, Input, input, IPhysics2DContact, Node, RigidBody, RigidBody2D, Vec2 } from 'cc';
+import { _decorator, Animation, AudioClip, Collider2D, Component, Contact2DType, ERigidBody2DType, Input, input, IPhysics2DContact, Node, RigidBody, RigidBody2D, Vec2 } from 'cc';
 import { GameManager } from './GameManager';
+import { AudioMgr } from './AudioMgr';
 const { ccclass, property } = _decorator;
 
 //通过枚举来控制小鸟得分
@@ -22,6 +23,10 @@ export class Bird extends Component {
     //向下掉落角度
     @property
     public DownAngle: number = 50;
+    @property(AudioClip)
+    public clickAudio: AudioClip = null;
+    @property(AudioClip)
+    public scoreAudio: AudioClip = null;
 
     //获取刚体组件，然后通过给刚体组件施加向上的线性速度来实现小鸟向上飞行的操作
     private rgd2D: RigidBody2D = null;
@@ -51,6 +56,8 @@ export class Bird extends Component {
         this.rgd2D.linearVelocity = new Vec2(0, this.upDistance)
         //让小鸟抬头 angle本地坐标系下的旋转，用欧拉角表示，但是限定在 z 轴上。
         this.node.angle = this.UpAngle;
+        //每次点击一次就播放音乐
+        AudioMgr.inst.playOneShot(this.clickAudio)
     }
 
     update(deltaTime: number) {
@@ -103,6 +110,7 @@ export class Bird extends Component {
         //当小鸟离开管道的时候触发得分
         if (otherCollider.tag === ColliderType.PIPE_MID) {
             GameManager.inst().addScore();
+            AudioMgr.inst.playOneShot(this.scoreAudio);
         }
     }
 }
