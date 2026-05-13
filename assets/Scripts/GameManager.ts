@@ -61,6 +61,14 @@ export class GameManager extends Component {
         // console.log("LocalStorage has been cleared!");
     }
     protected start(): void {
+        // 绑定回调
+        this.bird.onCollideWithObstacle = () => {
+            this.transitionToGameOverState();
+        };
+        this.bird.onPassPipe = () => {
+            this.addScore();
+        };
+
         this.transitionToReadyState();
         AudioMgr.inst.play(this.bgAudio, 0.5)
     }
@@ -89,6 +97,8 @@ export class GameManager extends Component {
     transitionToGameOverState() {
         if (this.curGS === GameState.GAMEOVER) return //发生碰撞之后游戏结束，第二次碰撞就不再会调用了
         this.curGS = GameState.GAMEOVER
+        // 通知小鸟游戏已结束，禁止后续碰撞响应
+        this.bird.setGameOver();
         this.bird.disableControlNotRGD();   //通过不禁用刚体组件的方法来避免报错
         this.bgScroll.disableScroll();
         this.landScroll.disableScroll();

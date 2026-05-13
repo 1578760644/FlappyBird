@@ -1,5 +1,4 @@
 import { _decorator, Animation, AudioClip, Collider2D, Component, Contact2DType, ERigidBody2DType, Input, input, IPhysics2DContact, Node, RigidBody, RigidBody2D, Vec2 } from 'cc';
-import { GameManager } from './GameManager';
 import { AudioMgr } from './AudioMgr';
 const { ccclass, property } = _decorator;
 
@@ -27,12 +26,18 @@ export class Bird extends Component {
     public clickAudio: AudioClip = null;
     @property(AudioClip)
     public scoreAudio: AudioClip = null;
+    // 添加一个标志，记录游戏是否已经结束
+    private _isGameOver: boolean = false;
 
     //获取刚体组件，然后通过给刚体组件施加向上的线性速度来实现小鸟向上飞行的操作
     private rgd2D: RigidBody2D = null;
 
     //判断小鸟是否可以被控制
     private _canControl: boolean = false;
+
+    // 添加两个回调属性,通过回调函数来避免Birds与GameManager的循环引用
+    public onCollideWithObstacle: () => void = null;
+    public onPassPipe: () => void = null;
 
     protected onLoad(): void {
         input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
@@ -102,16 +107,27 @@ export class Bird extends Component {
     //这个方法是通过刚体组件发起的，再通过transitionToGameOverState方法把刚体组件禁用会报错。因为游戏结束只是需要解除控制就可以了，不需要再禁用刚体组件。所以游戏结束需要单独调用一个方法，避免禁用刚体组件
     onBeginContact(selfConllider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
         // console.log(otherCollider.tag) //用于检测是否发生碰撞
+        if (this._isGameOver) return; // 游戏结束后不再响应碰撞
         if (otherCollider.tag === ColliderType.LAND || otherCollider.tag === ColliderType.PIPE) {
-            GameManager.inst().transitionToGameOverState();
+            // 通过回调通知外部，而不是直接调用 GameManager
+            if (this.onCollideWithObstacle) {
+                this.onCollideWithObstacle();
+            }
         }
     }
     onEndContact(selfConllider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+        if (this._isGameOver) return; // 游戏结束后不再响应得分事件
         //当小鸟离开管道的时候触发得分
         if (otherCollider.tag === ColliderType.PIPE_MID) {
-            GameManager.inst().addScore();
+            if (this.onPassPipe) {
+                this.onPassPipe();
+            }
             AudioMgr.inst.playOneShot(this.scoreAudio);
         }
+    }
+
+    public setGameOver() {
+        this._isGameOver = true;
     }
 }
 
