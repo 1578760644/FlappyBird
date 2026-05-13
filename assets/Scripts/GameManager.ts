@@ -116,7 +116,7 @@ export class GameManager extends Component {
     }
 
     //得分了就调用此方法
-    addScore(count: number = 1) {
+    addScore() {
         //在GameManager里面调用GameData里增加分数的方法
         GameData.addScore();
         //调用方法获得得分给label组件
