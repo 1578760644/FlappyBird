@@ -38,7 +38,7 @@ export class GameData {
     public static saveScore() {
         let curScore = this.getScore();
         let bestScore = this.getBestScore();
-        if (curScore > bestScore) {
+        if (curScore > bestScore) { //int类型判断完后，再转换为string类型存储。localStorage 只能存储字符串类型。
             localStorage.setItem(this.BESTSCORE, curScore.toString());
         }
     }

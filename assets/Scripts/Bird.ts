@@ -99,6 +99,7 @@ export class Bird extends Component {
         this.rgd2D.enabled = false; //禁用刚体组件
         this.getComponent(Animation).enabled = false; //禁用动画组件
     }
+    //游戏结束时不禁用刚体组件，避免发生组件底层逻辑报错
     public disableControlNotRGD() {
         this._canControl = false;
         this.getComponent(Animation).enabled = false; //禁用动画组件
@@ -107,7 +108,7 @@ export class Bird extends Component {
     //这个方法是通过刚体组件发起的，再通过transitionToGameOverState方法把刚体组件禁用会报错。因为游戏结束只是需要解除控制就可以了，不需要再禁用刚体组件。所以游戏结束需要单独调用一个方法，避免禁用刚体组件
     onBeginContact(selfConllider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
         // console.log(otherCollider.tag) //用于检测是否发生碰撞
-        if (this._isGameOver) return; // 游戏结束后不再响应碰撞
+        if (this._isGameOver) return; // 游戏结束后不再响应碰撞，防止小鸟在游戏重启时开启碰撞组件，导致二次触发碰效果
         if (otherCollider.tag === ColliderType.LAND || otherCollider.tag === ColliderType.PIPE) {
             // 通过回调通知外部，而不是直接调用 GameManager
             if (this.onCollideWithObstacle) {

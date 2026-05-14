@@ -13,7 +13,7 @@ export const enum GameState {
     READY,
     GAMING,
     GAMEOVER
-} //实际上没有起作用，暂时没有通过状态判断来进行其他的操作
+}
 
 @ccclass('GameManager')
 export class GameManager extends Component {
@@ -95,7 +95,8 @@ export class GameManager extends Component {
         this.gameOverUI.node.active = false;
     }
     transitionToGameOverState() {
-        if (this.curGS === GameState.GAMEOVER) return //发生碰撞之后游戏结束，第二次碰撞就不再会调用了
+        //发生碰撞之后游戏结束，第二次碰撞就不再会调用了。Bird那边也写了if (this._isGameOver) return;作为双重保险
+        if (this.curGS === GameState.GAMEOVER) return
         this.curGS = GameState.GAMEOVER
         // 通知小鸟游戏已结束，禁止后续碰撞响应
         this.bird.setGameOver();

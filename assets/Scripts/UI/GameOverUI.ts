@@ -17,10 +17,9 @@ export class GameOverUI extends Component {
     @property([Node])
     public medalArray: Node[] = [];
 
-    //可不可以通过枚举来传奖牌
-    //显示GameOverUI
+    //可不可以通过枚举来传奖牌？
     public show(curScore: number, bestScore: number) {
-        this.node.active = true;
+        //把当前分数和最高分数转换为字符串形式显示
         this.curScoreLabel.string = curScore.toString();
         this.bestScoreLabel.string = bestScore.toString();
         if (curScore > bestScore) {
@@ -41,17 +40,20 @@ export class GameOverUI extends Component {
         this.medalArray[indexInt].active = true;
     }
 
+    //#region
+    //已经通过按钮来重启游戏，暂时不需要触摸事件。正常应该是重启逻辑，而不是直接重构场景
+    // protected onLoad(): void {
+    //     input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
+    // }
+    // protected onDestroy(): void {
+    //     input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
+    // }
+    // onTouchStart() {
+    //     GameManager.inst().transitionToGameOverState();
+    // }
+    //#endregion
 
-
-    protected onLoad(): void {
-        input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
-    }
-    protected onDestroy(): void {
-        input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
-    }
-    onTouchStart() {
-        GameManager.inst().transitionToGameOverState();
-    }
+    //偷懒做法，实际上还是通过回调transitionToReadyState方法更稳妥。这两种方式的本质区别在于：重置游戏逻辑，还是完全销毁并重建场景。
     onPlayButtonClick() {
         // 通过loadScene重新加载当前场景，用getScene.name获取当当前场景名字
         director.loadScene(director.getScene().name);

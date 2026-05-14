@@ -10,7 +10,7 @@ export class PipeSpawner extends Component {
 
     //生成速率
     @property
-    spawnRate: number = 0.5;
+    spawnRate: number = 2.5;
 
     //通过计时器控制什么时候生成管道
     private timer: number = 0;
@@ -41,7 +41,7 @@ export class PipeSpawner extends Component {
             const p = this.node.getWorldPosition();
             pipeInst.setWorldPosition(p);
 
-            //通过随机整数来修改y轴生成的高度，实现控制管道的上下
+            //通过随机整数来随机修改y轴大小，实现控制管道上下位置的随机生成
             const y = math.randomRangeInt(-250, 300);
 
             //管道口本地高度通过修改本地坐标y实现
@@ -82,7 +82,12 @@ export class PipeSpawner extends Component {
         for (let i = 0; i < this.pipes.length; i++) {
             const pipe = this.pipes[i].getComponent(Pipe);
             if (pipe) {
-                pipe.enabled = false; //禁用节点用active，禁用组件用enabled
+                //#region禁用节点用active，禁用组件用enabled
+                //通过此方法视觉上：管道依然显示在屏幕上，没有消失。
+                //逻辑上：Pipe脚本里的 update或运动逻辑停止了，管道不再移动。
+                //存在关于事件穿透的风险，禁用脚本不会阻止点击事件，如果管道节点上没有其他东西拦截，点击事件依然会穿透这些静止的管道，漏到背景或下层节点去。
+                //#endregion
+                pipe.enabled = false;
             }
         }
     }
