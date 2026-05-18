@@ -21,6 +21,9 @@ export class GameManager extends Component {
     private static _inst: GameManager = null;
     //相当于是get方法
     public static inst() {
+        if (this._inst == null) {
+            this._inst = new GameManager();
+        }
         return this._inst;
     }
 
